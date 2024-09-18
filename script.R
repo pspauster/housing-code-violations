@@ -1,13 +1,14 @@
 library(tidyverse)
 library(janitor)
 
-#this is a comment
+base_url <- "https://data.cityofnewyork.us/resource/wvxf-dwi5.csv"
 
-squirrel <- read_csv("2018_Central_Park_Squirrel_Census_-_Squirrel_Data_20240916.csv") #this line reads in the data
+# Construct the full URL with query parameters
+query_url <- paste0(
+  base_url,
+  "?$where=inspectiondate BETWEEN '2022-07-01T00:00:00' AND '2024-06-31T23:59:59'",
+  "&$limit=2000000"
+)
 
-clean_squirrel <- squirrel %>% 
-  clean_names() %>% #this line cleans the names
-  rename(longitude = x, #separate arguments with a comma
-         latitude = y)
 
-
+violations <- read_csv(URLencode(query_url))
